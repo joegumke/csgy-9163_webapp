@@ -1,1 +1,1 @@
-asdfasdf
+return redirect('/home')

@@ -22,14 +22,12 @@ class RegistrationForm(Form):
 
 class wordForm(Form):
     textbox = TextAreaField('textbox', [validators.DataRequired(),validators.Length(max=200)])
-
-
+    
 # 3 forms with each function for processing (register & login & spellinput)
 @app.route('/')
 def index():
     return "Welcome to Joe Gumke JDG597 - Spell Checker Web Application!!!"
-    
-	
+  
 # Form for register 
 @app.route('/register', methods=['POST','GET'])
 def register():
@@ -41,12 +39,10 @@ def register():
         mfa = (form.email.data)
 
         if uname in userDict.keys():
-            #flash("User Already Exists")
             return "User Already Exists"
 
         if uname not in userDict.keys():
             userDict[uname] = [[pword],[mfa]]
-            #return redirect(url_for('login'))
             return redirect('/login')
             #flash("User Successfully Registered")
 
@@ -61,25 +57,18 @@ def register():
 def login():
     form = RegistrationForm(request.form)
 
-    if request.method == 'GET' and session.get('logged_in'):
+    if request.method == ('GET' or 'POST') and session.get('logged_in'):
         return redirect('/home')
-        # return render_template('home.html')
 
     if request.method == 'POST' and form.validate(): 
         uname = (form.username.data)
         pword = (form.password.data)
         mfa = (form.email.data)
-            #return 'Key:%s-- Value:%s ' % (key, value)
-            #return 'result[pword]: %s' % (userDict[result['uname']][0])
-            #return 'result[2fa]: %s' % (userDict[result['uname']][1])
-            #return result['2fa']
         if uname in userDict.keys() and pword in userDict[pword][0] and mfa in userDict[mfa][0]:
-            #### LAST SPOT #### get the indices properly working *****
             session['logged_in'] = True
-            return render_template('home.html')
+            return redirect('/home')
         else:
-            #return "%s" % (pword)
-            return "Unsuccessful Authentication"
+            return redirect('/register')
 
     return render_template('login.html', form=form)
 
@@ -90,15 +79,13 @@ def home():
         return render_template('home.html')
     
     if session.get('logged_in') and request.method =='POST' and request.form['submit_button'] =='Log Out':
-        session.pop('logged_in',None)
-        return 'logout'
+        session.pop('logged_in', None)
+        return redirect('/login')
 
     if session.get('logged_in') and request.method =='POST' and request.form['submit_button'] =='Spell Checker':
         return redirect('/spell_check')
-        #return render_template('spell_check.html', form=form)
-    
     else:
-        return 'You Must Login, Only Logged In Users Can Access...'
+        return redirect('/login')
 
 # Text Submission && Result Retrieval 
 @app.route('/spell_check', methods=['POST','GET'])
