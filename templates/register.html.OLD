@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+
+    <form action="" method="POST">
+        Username: <input type="text" name="uname">
+        Password: <input type="text" name="pword">
+        Email: <input type="text" name="2fa">
+        <input type="submit">
+    </form>
+</html>
