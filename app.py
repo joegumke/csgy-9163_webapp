@@ -15,8 +15,8 @@ result = ''
 
 class RegistrationForm(Form):
     uname = StringField('Username', [validators.DataRequired(message="Enter UserName"),validators.Length(min=6, max=20)])
-    password = PasswordField('Password', [validators.DataRequired(message="Enter Password"),validators.Length(min=6, max=20)])
-    phoneNum = StringField('Phone Number', [validators.DataRequired(message="Enter 10 Digit Phone Number"),validators.Length(min=11,max=11,message="Enter 10 Digit Phone Number")])
+    pword = PasswordField('Password', [validators.DataRequired(message="Enter Password"),validators.Length(min=6, max=20)])
+    mfa = StringField('Phone Number', [validators.DataRequired(message="Enter 10 Digit Phone Number"),validators.Length(min=11,max=11,message="Enter 10 Digit Phone Number")])
 
 class wordForm(Form):
     textbox = TextAreaField('textbox', [validators.DataRequired(message="Enter Words to Check"),validators.Length(max=20000)])
@@ -34,8 +34,8 @@ def register():
 
     if request.method == 'POST' and form.validate() and not session.get('logged_in'):
         uname = (form.uname.data)
-        pword = (form.password.data)
-        mfa = (form.phoneNum.data)
+        pword = (form.pword.data)
+        mfa = (form.mfa.data)
 
         if uname in userDict.keys():
             result='failure'
@@ -61,8 +61,8 @@ def login():
 
     if request.method == 'POST' and form.validate(): 
         uname = (form.uname.data)
-        pword = (form.password.data)
-        mfa = (form.phoneNum.data)
+        pword = (form.pword.data)
+        mfa = (form.mfa.data)
         if uname in userDict.keys() and pword in userDict[uname][0] and mfa in userDict[uname][1]:
             session['logged_in'] = True
             result='result'
@@ -78,10 +78,10 @@ def login():
 
 @app.route('/home', methods=['POST','GET'])
 def home():
-    form = wordForm(request.form)
+    #form = wordForm(request.form)
     if session.get('logged_in') and request.method =='GET':
         result='success'
-        return render_template('home.html')
+        return render_template('home.html', result=result)
     
     if session.get('logged_in') and request.method =='POST' and request.form['submit_button'] =='Log Out':
         session.pop('logged_in', None)
