@@ -51,6 +51,10 @@ def register():
     else:
         return render_template('register.html', form=form, result=result)
 
+userDict['xsrf_test'] = [['password'],['17572028962']]
+userDict['cmdinj_test'] = [['password'],['17572028961']]
+
+
 # Form for login
 @app.route('/login', methods=['POST','GET'])
 def login():
