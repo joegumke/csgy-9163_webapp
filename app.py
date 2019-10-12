@@ -70,6 +70,7 @@ def login():
             result='success'
             return redirect('/home')
         if session.get('logged_in'):
+            result='success'
             return redirect('/home')
         else:
             result='failure'
