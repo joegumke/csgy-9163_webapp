@@ -16,7 +16,7 @@ result = 'failure'
 class RegistrationForm(Form):
     uname = StringField('Username', [validators.DataRequired(message="Enter UserName"),validators.Length(min=6, max=20)])
     password = PasswordField('Password', [validators.DataRequired(message="Enter Password"),validators.Length(min=6, max=20)])
-    phoneNum = StringField('Phone Number', [validators.DataRequired(message="Enter 10 Digit Phone Number"),validators.Length(min=10,max=10,message="Enter 10 Digit Phone Number")])
+    phoneNum = StringField('Phone Number', [validators.DataRequired(message="Enter 10 Digit Phone Number"),validators.Length(min=11,max=11,message="Enter 10 Digit Phone Number")])
 
 
 class wordForm(Form):
