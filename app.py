@@ -67,10 +67,10 @@ def login():
         mfa = (form.phoneNum.data)
         if uname in userDict.keys() and pword in userDict[mfa][0] and mfa in userDict[pword][0]:
             session['logged_in'] = True
-            result='result'
+            result='success'
             return redirect('/home')
         if session.get('logged_in'):
-            result='result'
+            result='success'
             return redirect('/home')
         else:
             result='failure'
