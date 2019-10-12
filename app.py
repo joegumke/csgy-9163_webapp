@@ -47,7 +47,7 @@ def register():
             return redirect('/login')
     if request.method == 'GET' and session.get('logged_in'):
         result='success'
-        return redirect('/home')
+        return redirect('/register')
     else:
         return render_template('register.html', form=form, result=result)
 
