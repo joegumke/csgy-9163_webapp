@@ -74,7 +74,7 @@ def login():
         else:
             result='failure'
             return redirect('/register')
-	result='failure'
+    result='failure'
     return render_template('login.html', form=form)
 
 @app.route('/home', methods=['POST','GET'])
