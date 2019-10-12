@@ -32,7 +32,7 @@ def register():
     result='success'
     form = RegistrationForm(request.form)
 
-    if request.method == 'POST' and form.valresultate() and not session.get('logged_in'):
+    if request.method == 'POST' and form.validate() and not session.get('logged_in'):
         uname = (form.uname.data)
         pword = (form.password.data)
         mfa = (form.phoneNum.data)
