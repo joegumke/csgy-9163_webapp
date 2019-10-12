@@ -6,4 +6,9 @@ Welcome Home
   </dl>
     <p><input type=submit name='submit_button' value='Log Out'>
     <p><input type=submit name='submit_button' value='Spell Checker'>
+<div id={{result}}>
+{% for value in id %}
+     <div class="{% if value %}success{% else %}failure{% endif %}">{{ id }}:{{ value }}</div>
+{% endfor %}
+</div>
 </form>
