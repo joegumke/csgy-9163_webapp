@@ -11,7 +11,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 userDict = dict()
-result = 'failure'
+result = ''
 
 class RegistrationForm(Form):
     uname = StringField('Username', [validators.DataRequired(message="Enter UserName"),validators.Length(min=6, max=20)])
@@ -74,13 +74,14 @@ def login():
         else:
             result='failure'
             return redirect('/register')
-			
+	result='failure'
     return render_template('login.html', form=form)
 
 @app.route('/home', methods=['POST','GET'])
 def home():
     form = wordForm(request.form)
     if session.get('logged_in') and request.method =='GET':
+        id='success'
         return render_template('home.html')
     
     if session.get('logged_in') and request.method =='POST' and request.form['submit_button'] =='Log Out':
@@ -90,6 +91,7 @@ def home():
     if session.get('logged_in') and request.method =='POST' and request.form['submit_button'] =='Spell Checker':
         return redirect('/spell_check')
     else:
+        id='failure'
         return redirect('/login')
 
 # Text Submission && Result Retrieval 
