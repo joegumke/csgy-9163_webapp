@@ -44,9 +44,7 @@ def register():
         if uname not in userDict.keys():
             userDict[uname] = [[pword],[mfa]]
             result='success'
-            return(userDict[pword][0])
-            #return redirect('/login')
-
+            return redirect('/login')
     if request.method == 'GET' and session.get('logged_in'):
         result='success'
         return redirect('/home')
@@ -65,7 +63,7 @@ def login():
         uname = (form.uname.data)
         pword = (form.password.data)
         mfa = (form.phoneNum.data)
-        if uname in userDict.keys() and pword in userDict[mfa][0] and mfa in userDict[pword][0]:
+        if uname in userDict.keys() and pword in userDict[uname][0] and mfa in userDict[uname][1]:
             session['logged_in'] = True
             result='success'
             return redirect('/home')
