@@ -67,16 +67,16 @@ def login():
         mfa = (form.phoneNum.data)
         if uname in userDict.keys() and pword in userDict[pword][0] and mfa in userDict[mfa][0]:
             session['logged_in'] = True
-            result='success'
+            result='result'
             return redirect('/home')
         if session.get('logged_in'):
-            result='success'
+            result='result'
             return redirect('/home')
         else:
             result='failure'
             return redirect('/register')
     result='failure'
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, result=result)
 
 @app.route('/home', methods=['POST','GET'])
 def home():
