@@ -45,9 +45,9 @@ def register():
             userDict[uname] = [[pword],[mfa]]
             result='success'
             return redirect('/login')
-    if request.method == 'GET' and session.get('logged_in'):
-        result='success'
-        return redirect('/register')
+    #if request.method == 'GET' and session.get('logged_in'):
+    #    result='success'
+    #    return redirect('/register')
     else:
         return render_template('register.html', form=form, result=result)
 
