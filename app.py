@@ -2,10 +2,10 @@
 	
 from flask import Flask, request, url_for, redirect,render_template,flash,session
 from flask_login import LoginManager, current_user, login_user
-from wtforms import Form, BooleanField, StringField, PasswordField, validators, TextAreaField
+from wtforms import Form, BooleanField, StringField, PasswordField, validators, TextAreaField, IntegerField
 import subprocess
 
-#from wtforms.validators import ValidationError,DataRequired,Email
+#from wtforms.validators import ValidationError,DataRequired,phoneNum
 #from flask_wtf import FlaskForm
 
 app = Flask(__name__)
@@ -16,12 +16,12 @@ login_manager.init_app(app)
 userDict = dict()
 
 class RegistrationForm(Form):
-    username = StringField('Username', [validators.DataRequired(),validators.Length(min=6, max=20)])
-    email = StringField('Email Address', [validators.DataRequired(),validators.Email(),validators.Length(min=6, max=20)])
-    password = PasswordField('Password', [validators.DataRequired(),validators.Length(min=6, max=20)])
+    uname = StringField('Username', [validators.DataRequired(message="Enter UserName"),validators.Length(min=6, max=20)])
+    phoneNum = StringField('Phone Number', [validators.DataRequired(message="Enter 10 Digit Phone Number"),validators.Length(min=10,max=10,message="Enter 10 Digit Phone Number")])
+    password = PasswordField('Password', [validators.DataRequired(message="Enter Password"),validators.Length(min=6, max=20)])
 
 class wordForm(Form):
-    textbox = TextAreaField('textbox', [validators.DataRequired(),validators.Length(max=200)])
+    textbox = TextAreaField('textbox', [validators.DataRequired(message="Enter Words to Check"),validators.Length(max=20000)])
     
 # 3 forms with each function for processing (register & login & spellinput)
 @app.route('/')
@@ -34,9 +34,9 @@ def register():
     form = RegistrationForm(request.form)
 
     if request.method == 'POST' and form.validate() and not session.get('logged_in'):
-        uname = (form.username.data)
+        uname = (form.uname.data)
         pword = (form.password.data)
-        mfa = (form.email.data)
+        mfa = (form.phoneNum.data)
 
         if uname in userDict.keys():
             return "User Already Exists"
@@ -61,11 +61,13 @@ def login():
         return redirect('/home')
 
     if request.method == 'POST' and form.validate(): 
-        uname = (form.username.data)
+        uname = (form.uname.data)
         pword = (form.password.data)
-        mfa = (form.email.data)
+        mfa = (form.phoneNum.data)
         if uname in userDict.keys() and pword in userDict[pword][0] and mfa in userDict[mfa][0]:
             session['logged_in'] = True
+            return redirect('/home')
+        if session.get('logged_in'):
             return redirect('/home')
         else:
             return redirect('/register')
