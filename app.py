@@ -2,11 +2,8 @@
 	
 from flask import Flask, request, url_for, redirect,render_template,flash,session
 from flask_login import LoginManager, current_user, login_user
-from wtforms import Form, BooleanField, StringField, PasswordField, validators, TextAreaField, IntegerField
+from wtforms import Form, BooleanField, StringField, PasswordField, validators, TextAreaField, IntegerField,HiddenField
 import subprocess
-
-#from wtforms.validators import ValidationError,DataRequired,phoneNum
-#from flask_wtf import FlaskForm
 
 app = Flask(__name__)
 app.secret_key = '1234567891234567893242341230498120348719035192038471902873491283510981834712039847124123940812903752903847129038471290835710289675413864310867135'
@@ -14,6 +11,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 userDict = dict()
+result = 'failure'
 
 class RegistrationForm(Form):
     uname = StringField('Username', [validators.DataRequired(message="Enter UserName"),validators.Length(min=6, max=20)])
@@ -27,30 +25,32 @@ class wordForm(Form):
 @app.route('/')
 def index():
     return "Welcome to Joe Gumke JDG597 - Spell Checker Web Application!!!"
-  
+
 # Form for register 
 @app.route('/register', methods=['POST','GET'])
 def register():
+    result='success'
     form = RegistrationForm(request.form)
 
-    if request.method == 'POST' and form.validate() and not session.get('logged_in'):
+    if request.method == 'POST' and form.valresultate() and not session.get('logged_in'):
         uname = (form.uname.data)
         pword = (form.password.data)
         mfa = (form.phoneNum.data)
 
         if uname in userDict.keys():
+            result='failure'
             return "User Already Exists"
 
         if uname not in userDict.keys():
             userDict[uname] = [[pword],[mfa]]
+            result='success'
             return redirect('/login')
-            #flash("User Successfully Registered")
 
     if request.method == 'GET' and session.get('logged_in'):
+        result='success'
         return redirect('/home')
-
     else:
-        return render_template('register.html', form=form)
+        return render_template('register.html', form=form, result=result)
 
 # Form for login
 @app.route('/login', methods=['POST','GET'])
@@ -66,12 +66,14 @@ def login():
         mfa = (form.phoneNum.data)
         if uname in userDict.keys() and pword in userDict[pword][0] and mfa in userDict[mfa][0]:
             session['logged_in'] = True
+            result='success'
             return redirect('/home')
         if session.get('logged_in'):
             return redirect('/home')
         else:
+            result='failure'
             return redirect('/register')
-
+			
     return render_template('login.html', form=form)
 
 @app.route('/home', methods=['POST','GET'])
@@ -115,7 +117,6 @@ def spell_check():
 
     else:
         return redirect('/login')
-        #return redirect(url_for('login'))
 
     return render_template('spell_check.html', form=form)
 
