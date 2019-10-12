@@ -18,7 +18,6 @@ class RegistrationForm(Form):
     password = PasswordField('Password', [validators.DataRequired(message="Enter Password"),validators.Length(min=6, max=20)])
     phoneNum = StringField('Phone Number', [validators.DataRequired(message="Enter 10 Digit Phone Number"),validators.Length(min=11,max=11,message="Enter 10 Digit Phone Number")])
 
-
 class wordForm(Form):
     textbox = TextAreaField('textbox', [validators.DataRequired(message="Enter Words to Check"),validators.Length(max=20000)])
     
@@ -35,8 +34,8 @@ def register():
 
     if request.method == 'POST' and form.validate() and not session.get('logged_in'):
         uname = (form.uname.data)
-        mfa = (form.phoneNum.data)
         pword = (form.password.data)
+        mfa = (form.phoneNum.data)
 
         if uname in userDict.keys():
             result='failure'
@@ -45,7 +44,8 @@ def register():
         if uname not in userDict.keys():
             userDict[uname] = [[pword],[mfa]]
             result='success'
-            return redirect('/login')
+            return(userDict[pword][0])
+            #return redirect('/login')
 
     if request.method == 'GET' and session.get('logged_in'):
         result='success'
@@ -65,7 +65,7 @@ def login():
         uname = (form.uname.data)
         pword = (form.password.data)
         mfa = (form.phoneNum.data)
-        if uname in userDict.keys() and pword in userDict[pword][0] and mfa in userDict[mfa][0]:
+        if uname in userDict.keys() and pword in userDict[mfa][0] and mfa in userDict[pword][0]:
             session['logged_in'] = True
             result='result'
             return redirect('/home')
