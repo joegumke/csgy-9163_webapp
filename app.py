@@ -82,17 +82,18 @@ def login():
 def home():
     form = wordForm(request.form)
     if session.get('logged_in') and request.method =='GET':
-        id='success'
+        result='success'
         return render_template('home.html')
     
     if session.get('logged_in') and request.method =='POST' and request.form['submit_button'] =='Log Out':
         session.pop('logged_in', None)
+        result='failure'
         return redirect('/login')
 
     if session.get('logged_in') and request.method =='POST' and request.form['submit_button'] =='Spell Checker':
         return redirect('/spell_check')
     else:
-        id='failure'
+        result='failure'
         return redirect('/login')
 
 # Text Submission && Result Retrieval 
