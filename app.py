@@ -39,7 +39,7 @@ def register():
         uname = (registrationform.uname.data)
         pword = (registrationform.pword.data)
         mfa = (registrationform.mfa.data)
-        result = 'result'
+        result = 'success'
 
         if uname in userDict.keys():
             result='failure'
@@ -48,7 +48,7 @@ def register():
 
         if uname not in userDict.keys():
             userDict[uname] = [[pword],[mfa]]
-            result='result'
+            result='success'
             error="Successful Registration Please Login"
             return render_template('register.html', form=registrationform, result=result,error=error)
  
