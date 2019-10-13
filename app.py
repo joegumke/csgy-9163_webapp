@@ -112,8 +112,8 @@ def spell_check():
     misspelled =[]
 
     if session.get('logged_in') and request.method == 'GET':
-        result='success'
-        error='Successful Request to Spell Checker'
+        result='inputtext'
+        error='inputtext'
         return render_template('spell_check.html', form=form,result=result, error=error)
 
     if session.get('logged_in') and request.method == 'POST' and request.form['submit_button'] == 'Check Spelling':
