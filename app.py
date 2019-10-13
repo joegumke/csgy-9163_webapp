@@ -24,6 +24,7 @@ class RegistrationForm(Form):
 class wordForm(Form):
     textbox = TextAreaField('textbox', [validators.DataRequired(message="Enter Words to Check"),validators.Length(max=20000)])
     
+
 # 3 forms with each function for processing (register & login & spellinput)
 @app.route('/')
 def index():
@@ -32,76 +33,98 @@ def index():
 # Form for register 
 @app.route('/register', methods=['POST','GET'])
 def register():
-    result='success'
-    form = RegistrationForm(request.form)
+    registrationform = RegistrationForm(request.form)
 
-    if request.method == 'POST' and form.validate() and not session.get('logged_in'):
-        uname = (form.uname.data)
-        pword = (form.pword.data)
-        mfa = (form.mfa.data)
+    if request.method == 'POST' and registrationform.validate() and not session.get('logged_in'):
+        uname = (registrationform.uname.data)
+        pword = (registrationform.pword.data)
+        mfa = (registrationform.mfa.data)
+        result = ''
 
         if uname in userDict.keys():
             result='failure'
-            return redirect('/register')
+            error='User Already Exists, Please Login Or Register New Username'
+            return render_template('register.html', form=registrationform, result=result,error=error)
 
         if uname not in userDict.keys():
             userDict[uname] = [[pword],[mfa]]
             result='success'
-            return redirect('/login')
-    if request.method == 'GET' and session.get('logged_in'):
-        result='success'
-        return redirect('/login')
+            error="Successful Registration Please Login"
+            return render_template('register.html', form=registrationform, result=result,error=error)
+ 
+    if request.method == 'GET' and not session.get('logged_in'):
+        error='Not Logged In, Please Register or Login'
+        result='failure'
+        return render_template('register.html', form=registrationform, result=result,error=error)
+
     else:
-        result='success'
-        return render_template('register.html', form=form, result=result)
+        result=''
+        error='hit else'
+        return render_template('register.html', form=registrationform, result=result,error=error)
 
 # Form for login
 @app.route('/login', methods=['POST','GET'])
 def login():
-    form = RegistrationForm(request.form)
+    loginform = RegistrationForm(request.form)
 
-    if request.method == ('GET' or 'POST') and session.get('logged_in'):
+    if session.get('logged_in'):
         result='result'
-        return redirect('/home')
+        error='Already Logged In'
+        return render_template('login.html', form=loginform, result=result,error=error)
 
-    if request.method == 'POST' and form.validate(): 
-        uname = (form.uname.data)
-        pword = (form.pword.data)
-        mfa = (form.mfa.data)
+    if request.method == 'POST' and loginform.validate() and not session.get('logged_in'): 
+        uname = (loginform.uname.data)
+        pword = (loginform.pword.data)
+        mfa = (loginform.mfa.data)
         if uname in userDict.keys() and pword in userDict[uname][0] and mfa in userDict[uname][1]:
             session['logged_in'] = True
             result='result'
-            return redirect('/home')
-        if session.get('logged_in'):
-            result='result'
-            return redirect('/home')
+            error="Successful Authentication"
+            return render_template('login.html', form=loginform, result=result,error=error)
+
         else:
             result='failure'
-            return redirect('/register')
-    if request.method == ('GET' or 'POST') and not session.get('logged_in') and request.referrer =='http://localhost:5000/register' :
-        result='result'
+            error='Invalid Username, Please Login or Register'
+            return render_template('login.html', form=loginform, result=result,error=error)
+
+    if request.method == 'GET' and loginform.validate() and not session.get('logged_in'): 
+        result=''
+        error='GET LOGIN'
+        return render_template('login.html', form=loginform, result=result,error=error)
+
     else:
         result=''
+        error='login else statement'
+        return render_template('login.html', form=loginform, result=result,error=error)
 
-    return render_template('login.html', form=form, result=result)
 
 @app.route('/home', methods=['POST','GET'])
 def home():
-    #form = wordForm(request.form)
     if session.get('logged_in') and request.method =='GET':
         result='success'
-        return render_template('home.html', result=result)
+        error = 'Authenticated User '
+        return render_template('home.html', result=result, error=error)
     
+    if not session.get('logged_in') and request.method == ('GET' or 'POST'):
+        result='failure'
+        error = 'Please Login to Access Home '
+        return render_template('home.html', result=result, error=error)
+
     if session.get('logged_in') and request.method =='POST' and request.form['submit_button'] =='Log Out':
+        error='Logged Out'
+        result='success'
         session.pop('logged_in', None)
-        result=''
-        return redirect('/login')
+        return render_template('home.html', result=result, error=error)
 
     if session.get('logged_in') and request.method =='POST' and request.form['submit_button'] =='Spell Checker':
-        return redirect('/spell_check')
+        result='success'
+        error='Successful Request to Spell Checker'
+        return render_template('home.html', result=result, error=error)
+
     else:
-        result='failure'
-        return redirect('/login')
+        result=''
+        error='home else statement'
+        return render_template('home.html', result=result, error=error)
 
 # Text Submission && Result Retrieval 
 @app.route('/spell_check', methods=['POST','GET'])
@@ -110,7 +133,9 @@ def spell_check():
     misspelled =[]
 
     if session.get('logged_in') and request.method == 'GET':
-        return render_template('spell_check.html', form=form)
+        result='success'
+        error='Successful Request to Spell Checker'
+        return render_template('spell_check.html', form=form,result=result, error=error)
 
     if session.get('logged_in') and request.method == 'POST' and request.form['submit_button'] == 'Check Spelling':
         data = (form.textbox.data)
@@ -127,10 +152,18 @@ def spell_check():
         #    return "errors"
         #return render_template('spell_check.html', form=form)
 
-    else:
-        return redirect('/login')
+    if not session.get('logged_in'):
+        result='failure'
+        error='Login Before Accessing Spell Checker'
+        return render_template('spell_check.html', form=form,result=result, error=error)
 
-    return render_template('spell_check.html', form=form)
+    else:
+        error='spellCheck else statement'
+        result=''
+        return render_template('spell_check.html', form=form, result=result, error=error)
+        #return redirect('/login')
+
+    #return render_template('spell_check.html', form=form)
 
 if __name__ == '__main__':
     app.run(debug=True)
