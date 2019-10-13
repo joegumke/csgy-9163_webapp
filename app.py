@@ -1,14 +1,17 @@
 #app.py -- contains basics of python code. to start web service. 
-	
-from flask import Flask, request, url_for, redirect,render_template,flash,session
+
+from flask import Flask, request, redirect,render_template, session
 from flask_login import LoginManager, current_user, login_user
-from wtforms import Form, BooleanField, StringField, PasswordField, validators, TextAreaField, IntegerField,HiddenField
+from wtforms import Form, BooleanField, StringField, PasswordField, validators, TextAreaField, IntegerField, HiddenField
+from flask_wtf import CSRFProtect
 import subprocess
 
 app = Flask(__name__)
-app.secret_key = '1234567891234567893242341230498120348719035192038471902873491283510981834712039847124123940812903752903847129038471290835710289675413864310867135'
 login_manager = LoginManager()
 login_manager.init_app(app)
+app.secret_key = '1234567891234567893242341230498120348719035192038471902873491283510981834712039847124123940812903752903847129038471290835710289675413864310867135'
+csrf = CSRFProtect()
+csrf.init_app(app)
 
 userDict = dict()
 result = ''
@@ -45,9 +48,9 @@ def register():
             userDict[uname] = [[pword],[mfa]]
             result='success'
             return redirect('/login')
-    #if request.method == 'GET' and session.get('logged_in'):
-    #    result='success'
-    #    return redirect('/register')
+    if request.method == 'GET' and session.get('logged_in'):
+        result='success'
+        return redirect('/login')
     else:
         return render_template('register.html', form=form, result=result)
 
@@ -85,7 +88,7 @@ def home():
     
     if session.get('logged_in') and request.method =='POST' and request.form['submit_button'] =='Log Out':
         session.pop('logged_in', None)
-        result='failure'
+        result=''
         return redirect('/login')
 
     if session.get('logged_in') and request.method =='POST' and request.form['submit_button'] =='Spell Checker':
