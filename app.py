@@ -39,6 +39,7 @@ def register():
         uname = (form.uname.data)
         pword = (form.pword.data)
         mfa = (form.mfa.data)
+        result='success'
 
         if uname in userDict.keys():
             result='failure'
@@ -77,7 +78,7 @@ def login():
         else:
             result='failure'
             return redirect('/register')
-    result='result'
+    result='success'
     return render_template('login.html', form=form, result=result)
 
 @app.route('/home', methods=['POST','GET'])
