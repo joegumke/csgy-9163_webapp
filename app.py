@@ -42,13 +42,13 @@ def register():
 
         if uname in userDict.keys():
             result='failure'
-            error='User Already Exists, Please Login Or Register New Username'
+            error='failure'
             return render_template('register.html', form=registrationform, result=result,error=error)
 
         if uname not in userDict.keys():
             userDict[uname] = [[pword],[mfa]]
             result='success'
-            error="Successful Registration Please Login"
+            error="success"
             return render_template('register.html', form=registrationform, result=result,error=error)
 
     else:
