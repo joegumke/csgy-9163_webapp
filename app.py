@@ -53,7 +53,7 @@ def register():
 
     else:
         result='success'
-        error='hit else'
+        error='success'
         return render_template('register.html', form=registrationform, result=result,error=error)
 
 # Form for login
