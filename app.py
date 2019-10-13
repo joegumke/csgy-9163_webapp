@@ -51,7 +51,7 @@ def register():
             result='success'
             error="Successful Registration Please Login"
             return render_template('register.html', form=registrationform, result=result,error=error)
- 
+
     else:
         result='success'
         error='hit else'
@@ -156,9 +156,6 @@ def spell_check():
         error='spellCheck else statement'
         result=''
         return render_template('spell_check.html', form=form, result=result, error=error)
-        #return redirect('/login')
-
-    #return render_template('spell_check.html', form=form)
 
 if __name__ == '__main__':
     app.run(debug=True)
