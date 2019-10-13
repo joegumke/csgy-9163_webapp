@@ -52,13 +52,8 @@ def register():
             error="Successful Registration Please Login"
             return render_template('register.html', form=registrationform, result=result,error=error)
  
-    if request.method == 'GET' and not session.get('logged_in'):
-        error='Not Logged In, Please Register or Login'
-        result='failure'
-        return render_template('register.html', form=registrationform, result=result,error=error)
-
     else:
-        result='result'
+        result='success'
         error='hit else'
         return render_template('register.html', form=registrationform, result=result,error=error)
 
