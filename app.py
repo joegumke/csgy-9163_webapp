@@ -22,7 +22,7 @@ class RegistrationForm(Form):
     mfa = StringField('2FA', [validators.DataRequired(message="Enter 10 Digit Phone Number"),validators.Length(min=11,max=11,message="Enter 11 Digit Phone Number")], id='2fa')
 
 class wordForm(Form):
-    textbox = TextAreaField('textbox', [validators.DataRequired(message="Enter Words to Check"),validators.Length(max=20000)])
+    textbox = TextAreaField('textbox', [validators.DataRequired(message="Enter Words to Check"),validators.Length(max=20000)], id=inputtext)
     
 # 3 forms with each function for processing (register & login & spellinput)
 @app.route('/')
