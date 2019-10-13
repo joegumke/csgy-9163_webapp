@@ -60,6 +60,7 @@ def login():
     form = RegistrationForm(request.form)
 
     if request.method == ('GET' or 'POST') and session.get('logged_in'):
+        result='success'
         return redirect('/home')
 
     if request.method == 'POST' and form.validate(): 
@@ -68,10 +69,10 @@ def login():
         mfa = (form.mfa.data)
         if uname in userDict.keys() and pword in userDict[uname][0] and mfa in userDict[uname][1]:
             session['logged_in'] = True
-            result='result'
+            result='success'
             return redirect('/home')
         if session.get('logged_in'):
-            result='result'
+            result='success'
             return redirect('/home')
         else:
             result='failure'
