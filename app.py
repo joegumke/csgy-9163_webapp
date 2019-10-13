@@ -79,7 +79,7 @@ def login():
             result='failure'
             return redirect('/register')
     if request.method == ('GET' or 'POST') and not session.get('logged_in') and request.referrer =='http://localhost:5000/register' :
-        result='success'
+        result='result'
     else:
         result=''
 
