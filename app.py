@@ -35,7 +35,7 @@ def index():
 def register():
     registrationform = RegistrationForm(request.form)
 
-    if request.method == 'POST' and registrationform.validate() and not session.get('logged_in'):
+    if request.method == 'POST' and registrationform.validate():
         uname = (registrationform.uname.data)
         pword = (registrationform.pword.data)
         mfa = (registrationform.mfa.data)
