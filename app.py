@@ -83,17 +83,17 @@ def login():
             return render_template('login.html', form=loginform, result=result,error=error)
 
         else:
-            result='failure'
+            result='result'
             error='Invalid Username, Please Login or Register'
             return render_template('login.html', form=loginform, result=result,error=error)
 
     if request.method == 'GET' and loginform.validate() and not session.get('logged_in'): 
-        result=''
+        result='result'
         error='GET LOGIN'
         return render_template('login.html', form=loginform, result=result,error=error)
 
     else:
-        result=''
+        result='result'
         error='login else statement'
         return render_template('login.html', form=loginform, result=result,error=error)
 
