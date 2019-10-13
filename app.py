@@ -19,7 +19,7 @@ result = ''
 class RegistrationForm(Form):
     uname = StringField('Username', [validators.DataRequired(message="Enter UserName"),validators.Length(min=6, max=20)])
     pword = PasswordField('Password', [validators.DataRequired(message="Enter Password"),validators.Length(min=6, max=20)])
-    mfa = StringField('Phone Number', [validators.DataRequired(message="Enter 10 Digit Phone Number"),validators.Length(min=11,max=11,message="Enter 10 Digit Phone Number")])
+    mfa = StringField('Phone Number', [validators.DataRequired(message="Enter 10 Digit Phone Number"),validators.Length(min=11,max=11,message="Enter 11 Digit Phone Number")], id='2fa')
 
 class wordForm(Form):
     textbox = TextAreaField('textbox', [validators.DataRequired(message="Enter Words to Check"),validators.Length(max=20000)])
@@ -39,11 +39,10 @@ def register():
         uname = (form.uname.data)
         pword = (form.pword.data)
         mfa = (form.mfa.data)
-        result='success'
 
         if uname in userDict.keys():
             result='failure'
-            return "User Already Exists"
+            return redirect('/register')
 
         if uname not in userDict.keys():
             userDict[uname] = [[pword],[mfa]]
@@ -53,6 +52,7 @@ def register():
         result='success'
         return redirect('/login')
     else:
+        result=''
         return render_template('register.html', form=form, result=result)
 
 # Form for login
