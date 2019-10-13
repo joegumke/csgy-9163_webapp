@@ -24,7 +24,6 @@ class RegistrationForm(Form):
 class wordForm(Form):
     textbox = TextAreaField('textbox', [validators.DataRequired(message="Enter Words to Check"),validators.Length(max=20000)])
     
-
 # 3 forms with each function for processing (register & login & spellinput)
 @app.route('/')
 def index():
@@ -62,11 +61,6 @@ def register():
 def login():
     loginform = RegistrationForm(request.form)
 
-    if session.get('logged_in'):
-        result='result'
-        error='Already Logged In'
-        return render_template('login.html', form=loginform, result=result,error=error)
-
     if request.method == 'POST' and loginform.validate() and not session.get('logged_in'): 
         uname = (loginform.uname.data)
         pword = (loginform.pword.data)
@@ -82,11 +76,6 @@ def login():
             error='Invalid Username, Please Login or Register'
             return render_template('login.html', form=loginform, result=result,error=error)
 
-    if request.method == 'GET' and loginform.validate() and not session.get('logged_in'): 
-        result='result'
-        error='GET LOGIN'
-        return render_template('login.html', form=loginform, result=result,error=error)
-
     else:
         result='result'
         error='login else statement'
@@ -100,11 +89,6 @@ def home():
         error = 'Authenticated User '
         return render_template('home.html', result=result, error=error)
     
-    if not session.get('logged_in') and request.method == ('GET' or 'POST'):
-        result='failure'
-        error = 'Please Login to Access Home '
-        return render_template('home.html', result=result, error=error)
-
     if session.get('logged_in') and request.method =='POST' and request.form['submit_button'] =='Log Out':
         error='Logged Out'
         result='success'
