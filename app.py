@@ -78,7 +78,11 @@ def login():
         else:
             result='failure'
             return redirect('/register')
-    result='success'
+    if request.method == ('GET' or 'POST') and not session.get('logged_in') and request.referrer =='http://localhost:5000/register' :
+        result='success'
+    else:
+        result=''
+
     return render_template('login.html', form=form, result=result)
 
 @app.route('/home', methods=['POST','GET'])
