@@ -1,9 +1,11 @@
 language: python
+python: "3.7"
 before_install:
-	- sudo pip3 install tox-travis bs4 flask flask-login detox
-	- sudo pip3 -r requirements.txt
+	- pip3 install tox-travis flask flask-login tox flask-wtf
+	- pip3 -r requirements.txt
 
-scripts:
+script:
+	- flask run &
 	- tox # -< easy integration with python
 	
 	
