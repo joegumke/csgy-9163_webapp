@@ -71,9 +71,18 @@ def login():
             error="Successful Authentication"
             return render_template('login.html', form=loginform, result=result,error=error)
 
+        if uname not in userDict.keys() or pword not in userDict[uname][0]:
+            result='result'
+            error='Incorrect'
+            return render_template('login.html', form=loginform, result=result,error=error)
+        if mfa not in userDict[uname][1]:
+            result='failure'
+            error='Two-Factor'
+            return render_template('login.html', form=loginform, result=result,error=error)  
+
         else:
             result='result'
-            error='Invalid Username, Please Login or Register'
+            error='Incorrect'
             return render_template('login.html', form=loginform, result=result,error=error)
 
     else:
