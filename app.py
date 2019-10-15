@@ -38,23 +38,23 @@ def register():
         uname = (registrationform.uname.data)
         pword = (registrationform.pword.data)
         mfa = (registrationform.mfa.data)
-        result = 'success'
+        #result = 'success'
 
         if uname in userDict.keys():
-            result='failure'
+            #result='failure'
             error='failure'
-            return render_template('register.html', form=registrationform, result=result,error=error)
+            return render_template('register.html', form=registrationform, error=error)
 
         if uname not in userDict.keys():
             userDict[uname] = [[pword],[mfa]]
-            result='success'
+            #result='success'
             error="success"
-            return render_template('register.html', form=registrationform, result=result,error=error)
+            return render_template('register.html', form=registrationform, error=error)
 
     else:
-        result='success'
+        #result='success'
         error='success'
-        return render_template('register.html', form=registrationform, result=result,error=error)
+        return render_template('register.html', form=registrationform, error=error)
 
 # Form for login
 @app.route('/login', methods=['POST','GET'])
@@ -67,52 +67,51 @@ def login():
         mfa = (loginform.mfa.data)
         if uname in userDict.keys() and pword in userDict[uname][0] and mfa in userDict[uname][1]:
             session['logged_in'] = True
-            result='result'
+            #result='result'
             error="Successful Authentication"
-            return render_template('login.html', form=loginform, result=result,error=error)
+            return render_template('login.html', form=loginform,error=error)
 
         if uname not in userDict.keys() or pword not in userDict[uname][0]:
-            result='result'
+            #result='result'
             error='Incorrect'
-            return render_template('login.html', form=loginform, result=result,error=error)
+            return render_template('login.html', form=loginform,error=error)
         if mfa not in userDict[uname][1]:
-            result='failure'
+            #result='failure'
             error='Two-Factor'
-            return render_template('login.html', form=loginform, result=result,error=error)  
-
+            return render_template('login.html', form=loginform,error=error)  
         else:
-            result='result'
+            #result='result'
             error='Incorrect'
-            return render_template('login.html', form=loginform, result=result,error=error)
+            return render_template('login.html', form=loginform,error=error)
 
     else:
-        result='result'
+        #result='result'
         error='login else statement'
-        return render_template('login.html', form=loginform, result=result,error=error)
+        return render_template('login.html', form=loginform,error=error)
 
 
 @app.route('/home', methods=['POST','GET'])
 def home():
     if session.get('logged_in') and request.method =='GET':
-        result='success'
+        #result='success'
         error = 'Authenticated User '
-        return render_template('home.html', result=result, error=error)
+        return render_template('home.html', error=error)
     
     if session.get('logged_in') and request.method =='POST' and request.form['submit_button'] =='Log Out':
         error='Logged Out'
-        result='success'
+        #result='success'
         session.pop('logged_in', None)
-        return render_template('home.html', result=result, error=error)
+        return render_template('home.html', error=error)
 
     if session.get('logged_in') and request.method =='POST' and request.form['submit_button'] =='Spell Checker':
-        result='success'
+        #result='success'
         error='Successful Request to Spell Checker'
-        return render_template('home.html', result=result, error=error)
+        return render_template('home.html', error=error)
 
     else:
-        result=''
+        #result=''
         error='home else statement'
-        return render_template('home.html', result=result, error=error)
+        return render_template('home.html', error=error)
 
 # Text Submission && Result Retrieval 
 @app.route('/spell_check', methods=['POST','GET'])
@@ -121,9 +120,9 @@ def spell_check():
     misspelled =[]
 
     if session.get('logged_in') and request.method == 'GET':
-        result='inputtext'
+        #result='inputtext'
         error='inputtext'
-        return render_template('spell_check.html', form=form,result=result, error=error)
+        return render_template('spell_check.html', form=form, error=error)
 
     if session.get('logged_in') and request.method == 'POST' and request.form['submit_button'] == 'Check Spelling':
         data = (form.textbox.data)
@@ -141,14 +140,14 @@ def spell_check():
         #return render_template('spell_check.html', form=form)
 
     if not session.get('logged_in'):
-        result='failure'
+        #result='failure'
         error='Login Before Accessing Spell Checker'
-        return render_template('spell_check.html', form=form,result=result, error=error)
+        return render_template('spell_check.html', form=form,error=error)
 
     else:
         error='spellCheck else statement'
-        result=''
-        return render_template('spell_check.html', form=form, result=result, error=error)
+        #result=''
+        return render_template('spell_check.html', form=form, error=error)
 
 if __name__ == '__main__':
     app.run(debug=True)
