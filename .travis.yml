@@ -4,6 +4,6 @@ install:
     - pip3 install tox-travis flask flask-login tox flask-wtf BeautifulSoup
 
 script:
-		- flask run &
-		- tox 
+    - flask run &
+    - tox 
 	
