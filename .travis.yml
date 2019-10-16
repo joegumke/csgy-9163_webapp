@@ -1,7 +1,7 @@
 language: python
 python: "3.6"
 install:
-    - pip3 install tox-travis flask flask-login tox flask-wtf BeautifulSoup4 bs4
+    - pip3 install requests tox-travis flask flask-login tox flask-wtf BeautifulSoup4 bs4
 
 script:
     - flask run &
