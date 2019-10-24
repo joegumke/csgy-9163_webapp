@@ -4,7 +4,6 @@
 
 
 matrix:
-    include:
    - python: 2.7
     language: python
     install: pip install requests tox-travis flask flask-login tox flask-wtf BeautifulSoup4 bs4
