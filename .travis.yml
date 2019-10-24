@@ -1,17 +1,13 @@
-
+language: python
+install: 
+   - pip3 install requests tox-travis flask flask-login tox flask-wtf BeautifulSoup4 bs4
+   - pip install requests tox-travis flask flask-login tox flask-wtf BeautifulSoup4 bs4
 #python: "3.6"
-
-
 
 matrix:
    - python: 2.7
-    language: python
-    install: pip install requests tox-travis flask flask-login tox flask-wtf BeautifulSoup4 bs4
     env: TOX_ENV=py27
-    
-    - python: 3.6
-    language: python
-    install: pip3 install requests tox-travis flask flask-login tox flask-wtf BeautifulSoup4 bs4
+    - python: 3.6   
     env: TOX_ENV=py36
 
 script:
