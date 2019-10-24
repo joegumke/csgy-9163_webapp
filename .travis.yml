@@ -11,7 +11,7 @@ matrix:
 
 install: 
    - pip3 install requests tox-travis flask flask-login tox flask-wtf BeautifulSoup4 bs4
-   #- pip install requests tox-travis flask flask-login tox flask-wtf BeautifulSoup4 bs4
+   - pip install requests tox-travis flask flask-login tox flask-wtf BeautifulSoup4 bs4
 script:
     - flask run &
     - tox -e $TOX_ENV
